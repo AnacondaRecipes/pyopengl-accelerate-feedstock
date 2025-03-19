@@ -28,7 +28,7 @@ requirements:
     - python
     - numpy
     - pyopengl  # [unix]
-    - freeglut  # [linux]
+    - freeglut  # [linux and (not s390x)]
 
 test:
   imports:
