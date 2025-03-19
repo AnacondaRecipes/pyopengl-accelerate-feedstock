@@ -1,16 +1,18 @@
-{% set version = "3.1.5" %}
+{% set version = "3.1.9" %}
 
 package:
   name: pyopengl-accelerate
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/P/PyOpenGL-accelerate/PyOpenGL-accelerate-{{ version }}.tar.gz
-  sha256: 12e5518b0216a478527c7ce5ddce623c3d0517adeb87226da767772e8b7f2f06
+  url: https://pypi.io/packages/source/P/PyOpenGL-accelerate/pyopengl_accelerate-{{ version }}.tar.gz
+  sha256: 85957c7c76975818ff759ec9243f9dc7091ef6f373ea37a2eb50c320fd9a86f3
 
 build:
   number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv "
+  # pyopengl isn't vailable on win.
+  skip: true  # [win]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
   build:
@@ -18,29 +20,34 @@ requirements:
   host:
     - python
     - pip
-    - cython
-    - numpy
+    - cython >=0.28
+    - numpy 2
+    - setuptools >=42.0
+    - wheel
   run:
     - python
-    - {{ pin_compatible('numpy') }}
-    - pyopengl
-    - freeglut        # [linux]
+    - numpy
+    - pyopengl  # [unix]
+    - freeglut  # [linux and (not s390x)]
 
 test:
   imports:
     - OpenGL_accelerate
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
-  home: http://pyopengl.sourceforge.net
-  license: BSD
+  home: https://mcfletch.github.io/pyopengl
+  license: LicenseRef-pyopengl
   license_file: license.txt
   license_family: BSD
   summary: Acceleration code for PyOpenGL
   description: |
     This set of C (Cython) extensions provides acceleration of common operations for slow points in PyOpenGL .
-  doc_url: http://pyopengl.sourceforge.net/documentation/index.html
-  doc_source_url: https://sourceforge.net/projects/pyopengl/
-  dev_url: https://github.com/mcfletch/pyopengl
+  doc_url: https://mcfletch.github.io/pyopengl/documentation/index.html
+  dev_url: https://github.com/mcfletch/pyopengl/tree/master/accelerate
 
 extra:
   recipe-maintainers:
