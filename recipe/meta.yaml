@@ -21,6 +21,7 @@ requirements:
     - pip
     - cython >=0.28
     - numpy {{ numpy }}
+    - freeglut {{ freeglut }}  # [not osx]
     - setuptools >=42.0
     - wheel
   run:
