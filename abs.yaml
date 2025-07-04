@@ -1,2 +1,2 @@
-build_env_vars:
-  ANACONDA_ROCKET_ENABLE_PY313: yes
+channels:
+  - https://staging.continuum.io/prefect/fs/pyopengl-feedstock/pr5/15cb329
