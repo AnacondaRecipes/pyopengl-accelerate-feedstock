@@ -1,17 +1,16 @@
+{% set name = "pyopengl-accelerate" %}
 {% set version = "3.1.9" %}
 
 package:
-  name: pyopengl-accelerate
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/P/PyOpenGL-accelerate/pyopengl_accelerate-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/P/PyOpenGL-accelerate/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
   sha256: 85957c7c76975818ff759ec9243f9dc7091ef6f373ea37a2eb50c320fd9a86f3
 
 build:
-  number: 0
-  # pyopengl isn't vailable on win.
-  skip: true  # [win]
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
@@ -21,22 +20,28 @@ requirements:
     - python
     - pip
     - cython >=0.28
-    - numpy 2
+    - numpy {{ numpy }}
+    - freeglut {{ freeglut }}  # [not osx]
     - setuptools >=42.0
     - wheel
   run:
     - python
     - numpy
-    - pyopengl  # [unix]
-    - freeglut  # [linux and (not s390x)]
+    - pyopengl {{ version }}
+    - freeglut  # [not osx]
 
 test:
+  source_files:
+    - tests
   imports:
     - OpenGL_accelerate
-  requires:
-    - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests
+  requires:
+    - pip
+    - pytest
 
 about:
   home: https://mcfletch.github.io/pyopengl
