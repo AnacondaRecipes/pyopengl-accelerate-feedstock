@@ -1,34 +1,35 @@
-{% set name = "pyopengl-accelerate" %}
-{% set version = "3.1.9" %}
+{% set name = "PyOpenGL-accelerate" %}
+{% set version = "3.1.10" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/P/PyOpenGL-accelerate/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
-  sha256: 85957c7c76975818ff759ec9243f9dc7091ef6f373ea37a2eb50c320fd9a86f3
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_')|lower }}-{{ version }}.tar.gz
+  sha256: 82751c83f0a6f732b8b5923990edc2441d38176a98756b1718e8d6c4379f5a71
 
 build:
-  number: 1
+  number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
+  # The pyopengl >=3.1.10 is not in the main channel, look pyopengl meta.yaml.
+  skip: true  # [win]
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
   host:
-    - python
     - pip
+    - python
+    - wheel
+    - setuptools >=42.0
     - cython >=0.28
     - numpy {{ numpy }}
-    - freeglut {{ freeglut }}  # [not osx]
-    - setuptools >=42.0
-    - wheel
   run:
     - python
     - numpy
     - pyopengl {{ version }}
-    - freeglut  # [not osx]
 
 test:
   source_files:
