@@ -10,10 +10,8 @@ source:
   sha256: 82751c83f0a6f732b8b5923990edc2441d38176a98756b1718e8d6c4379f5a71
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
-  # The pyopengl >=3.1.10 is not in the main channel, look pyopengl meta.yaml.
-  skip: true  # [win]
 
 requirements:
   build:
@@ -36,6 +34,15 @@ test:
     - tests
   imports:
     - OpenGL_accelerate
+    - OpenGL_accelerate.arraydatatype
+    - OpenGL_accelerate.buffers_formathandler
+    - OpenGL_accelerate.errorchecker
+    - OpenGL_accelerate.formathandler
+    - OpenGL_accelerate.latebind
+    - OpenGL_accelerate.nones_formathandler
+    - OpenGL_accelerate.numpy_formathandler
+    - OpenGL_accelerate.vbo
+    - OpenGL_accelerate.wrapper
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
