@@ -27,7 +27,7 @@ requirements:
   run:
     - python
     - numpy
-    - pyopengl {{ version }}
+    - pyopengl =={{ version }}
 
 test:
   source_files:
